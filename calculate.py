@@ -4,14 +4,15 @@ import dateutil.relativedelta
 
 class Calculate():
     def __init__(self):
-        #todo - místo konstanty částky pro daná časová období udělat načítání z pole z databáze
-        #data datumy pro potřeby testu
-        self.x_date_to = datetime.datetime.now() 
+        # todo - místo konstanty částky pro daná časová období udělat načítání z pole z databáze
+        # data datumy pro potřeby testu
+        self.x_date_to = datetime.datetime.now()
         self.x_date_to_mid = self.x_date_to + dateutil.relativedelta.relativedelta(hour=0, minute=0, second=0)
-        self.x_date_from = self.x_date_to + dateutil.relativedelta.relativedelta(days=-3, hour=11, minute=0, second=0) #výpočet začátku služební cesty, days=-3 znamená že odečte od teď tři dny, hour=11 znamená, že nastaví hodiny na 11:00 Tzn služební cesta začne před tremi dny v jedenác dopoledne. 
+        # výpočet začátku služební cesty, days=-3 znamená že odečte od teď tři dny, hour=11 znamená, že nastaví hodiny na 11:00 Tzn služební cesta začne před tremi dny v jedenác dopoledne.
+        self.x_date_from = self.x_date_to + dateutil.relativedelta.relativedelta(days=-2, hour=11, minute=0, second=0)
         self.x_date_from_mid = self.x_date_from + \
             dateutil.relativedelta.relativedelta(days=1, hour=0, minute=0, second=0)
-        self.x_total_free_food = 0 #konstanta bude známá z formuláře
+        self.x_total_free_food = 4  # konstanta bude známá z formuláře
 
     def calculate(self):
         free_food_price = False
@@ -24,7 +25,7 @@ class Calculate():
             self.nahrada_hodiny_last = 0.0
             # maximální počet jídel pro all day je 4 když vyjdou na den 4 a víc jídel je srážka rovná příplatku (259-259)
             if self.x_total_free_food > 0:
-                if duration_days > 0 and x_total_free_food >0:
+                if duration_days > 0 and self.x_total_free_food > 0:
                     all_days_free_day = int(self.x_total_free_food/duration_days)
                     if all_days_free_day > 4:
                         free_food_to_first_or_last_day = (all_days_free_day-4)*duration_days
@@ -84,7 +85,7 @@ class Calculate():
                                     if first_day_free_food > 0:
                                         self.nahrada_hodiny_first = self.nahrada_hodiny_first - \
                                             (first_day_free_food*0.35*self.nahrada_hodiny_first)
-                    #print(self.nahrada_hodiny_first)
+                    # print(self.nahrada_hodiny_first)
                 last_day_duration = self.x_date_to - self.x_date_to_mid
                 last_day_hours = last_day_duration.total_seconds()/3600
                 if last_day_hours:
@@ -111,9 +112,9 @@ class Calculate():
                                 self.nahrada_hodiny_last = self.nahrada_hodiny_last - \
                                     (last_day_free_food*0.7*self.nahrada_hodiny_last)
 
-                    #print(self.nahrada_hodiny_last)
+                    # print(self.nahrada_hodiny_last)
                     self.nahrada_hodiny = self.nahrada_hodiny_first+self.nahrada_hodiny_last
-                    #print(self.nahrada_hodiny)
+                    # print(self.nahrada_hodiny)
             else:
                 duration_days_in_hours = duration.days*24
                 duration_hours = duration.total_seconds()/3600
@@ -137,10 +138,10 @@ class Calculate():
 
         celkem = self.nahrada_dny+self.nahrada_hodiny
 
-        print("Datum od %s" %self.x_date_from, "Datum do %s" %self.x_date_to)
-        print("Náhrada hodiny %s" %self.nahrada_hodiny)
-        print("Náhrada celé dny dny %s" %self.nahrada_dny)
-        print("Náhrada celkem %s" %round(celkem, 0))
+        print("Datum od %s" % self.x_date_from, "Datum do %s" % self.x_date_to)
+        print("Náhrada hodiny %s" % self.nahrada_hodiny)
+        print("Náhrada celé dny dny %s" % self.nahrada_dny)
+        print("Náhrada celkem %s" % round(celkem, 0))
 
 
 def main():
