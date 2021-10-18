@@ -26,7 +26,14 @@ class hr_expense(models.Model):
         nahrada_hodiny = 0.0
         nahrada_hodiny_first = 0.0
         nahrada_hodiny_last = 0.0
+        first_day_hours = 0.0
+        last_day_hours = 0.0
+        duration_remain = 0.0
+        duration_days = 0
         free_food_price = False
+        exp_min=self.env.user.company_id.exp_min
+        exp_mid=self.env.user.company_id.exp_mid
+        exp_max=self.env.user.company_id.exp_max
         if self.date_from and self.date_to:
             duration = self.date_to-self.date_from
             duration_days = duration.days-1
@@ -48,7 +55,7 @@ class hr_expense(models.Model):
                     else:
                         all_days_free_addday = (self.free_food_num % duration_days)
                     all_days_free_food = all_days_free_day*duration_days
-                    free_food_price = all_days_free_food*0.25*259
+                    free_food_price = all_days_free_food*0.25*exp_max
                     #print("num food per day %s" % all_days_free_day)
                     #print("modulo food per day %s" % all_days_free_addday)
                     #print("all days num days free food %s" % all_days_free_food)
@@ -69,14 +76,14 @@ class hr_expense(models.Model):
                 #print("first day %s" % first_day_free_food)
                 last_day_free_food = int(self.free_food_num-first_day_free_food-all_days_free_food)
                 #print("last day %s" % last_day_free_food)
-                nahrada_dny = duration_days*259
+                nahrada_dny = duration_days*exp_max
                 if free_food_price:
                     nahrada_dny = nahrada_dny-free_food_price
                 first_day_duration = date_from_mid - self.date_from
                 first_day_hours = float(first_day_duration.total_seconds()/3600)
                 if first_day_hours:
                     if first_day_hours > 5.0:
-                        nahrada_hodiny_first = 108
+                        nahrada_hodiny_first = exp_min
                         if first_day_free_food > 1:
                             nahrada_hodiny_first = 0.0
                         else:
@@ -85,12 +92,12 @@ class hr_expense(models.Model):
                                     (first_day_free_food*0.7*nahrada_hodiny_first)
                         if first_day_hours > 12.0:
                             if first_day_hours > 18.0:
-                                nahrada_hodiny_first = 259
+                                nahrada_hodiny_first = exp_max
                                 if first_day_free_food > 0:
                                     nahrada_hodiny_first = nahrada_hodiny_first - \
                                         (first_day_free_food*0.25*nahrada_hodiny_first)
                             else:
-                                nahrada_hodiny_first = 167
+                                nahrada_hodiny_first = exp_mid
                                 if first_day_free_food > 2:
                                     nahrada_hodiny_first = 0.0
                                 else:
@@ -106,12 +113,12 @@ class hr_expense(models.Model):
                             nahrada_hodiny_last = 0.0
                         if last_day_hours > 12.0:
                             if last_day_hours > 18.0:
-                                nahrada_hodiny_last = nahrada_hodiny_last+259
+                                nahrada_hodiny_last = nahrada_hodiny_last+exp_max
                                 if last_day_free_food > 0:
                                     nahrada_hodiny_last = nahrada_hodiny_last - \
                                         (last_day_free_food*0.25*nahrada_hodiny_last)
                             else:
-                                nahrada_hodiny_last = nahrada_hodiny_last+167
+                                nahrada_hodiny_last = nahrada_hodiny_last+exp_mid
                                 if last_day_free_food > 2:
                                     nahrada_hodiny_last = 0.0
                                 else:
@@ -119,7 +126,7 @@ class hr_expense(models.Model):
                                         nahrada_hodiny_last = nahrada_hodiny_last - \
                                             (last_day_free_food*0.35*nahrada_hodiny_last)
                         if last_day_hours <= 12.0:
-                            nahrada_hodiny_last = nahrada_hodiny_last+108
+                            nahrada_hodiny_last = nahrada_hodiny_last+exp_min
                             if last_day_free_food > 0:
                                 nahrada_hodiny_last = nahrada_hodiny_last - \
                                     (last_day_free_food*0.7*nahrada_hodiny_last)
@@ -135,15 +142,15 @@ class hr_expense(models.Model):
                     if duration_remain > 5.0:
                         if duration_remain > 12.0:
                             if duration_remain > 18.0:
-                                nahrada_hodiny = nahrada_hodiny+259-free_food_price
+                                nahrada_hodiny = nahrada_hodiny+exp_max-free_food_price
                                 if self.free_food_num >= 4:
                                     nahrada_hodiny = 0.0
                             else:
-                                nahrada_hodiny = nahrada_hodiny+167-free_food_price
+                                nahrada_hodiny = nahrada_hodiny+exp_mid-free_food_price
                                 if self.free_food_num > 2:
                                     nahrada_hodiny = 0.0
                         else:
-                            nahrada_hodiny = nahrada_hodiny+108-free_food_price
+                            nahrada_hodiny = nahrada_hodiny+exp_min-free_food_price
                             if self.free_food_num > 1:
                                 nahrada_hodiny = 0.0
 
@@ -178,3 +185,4 @@ class hr_expense(models.Model):
 
 
 #     _inherit = ''
+

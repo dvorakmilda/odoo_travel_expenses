@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+    <record id='custom_base_view_company_form' model="ir.ui.view" >
+        <field name="name">custom.res.company.form</field>
+        <field name="model">res.company</field >
+        <field name="inherit_id" ref='base.view_company_form'/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='nomenclature_id']" position="after">
+                <field name="exp_min"/>
+                <field name="exp_mid"/>
+                <field name="exp_max"/>
+            </xpath>
+        </field>
+    </record>
+    <record id='custom_base_view_company_tree' model="ir.ui.view">
+        <field name="name">custom.res.company.tree</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref='base.view_company_tree'/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="exp_min"/>
+                <field name="exp_mid"/>
+                <field name="exp_max"/>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>
