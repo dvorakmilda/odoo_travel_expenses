@@ -60,12 +60,12 @@
                         <field name="total_travel"/>
                       </group>
                       <group>
-                        <field name="first_day_hours"/>
-                        <field name="first_day_allowance"/>
-                        <field name="last_day_hours"/>
-                        <field name="last_day_allowance"/>
-                        <field name="full_day_num"/>
-                        <field name="full_day_allowance"/>
+                        <field name="first_day_hours" invisible="True"/>
+                        <field name="first_day_allowance" invisible="True"/>
+                        <field name="last_day_hours" invisible="True"/>
+                        <field name="last_day_allowance" invisible="True"/>
+                        <field name="full_day_num" invisible="True"/>
+                        <field name="full_day_allowance" invisible="True"/>
                       </group>
                     </group>
                   </page>
