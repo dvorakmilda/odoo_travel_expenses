@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 import datetime
 import dateutil.relativedelta
+from odoo.exceptions import ValidationError
 
 class hr_expense(models.Model):
     _inherit = 'hr.expense'
@@ -181,4 +182,21 @@ class hr_expense(models.Model):
                 rec.unit_amount=celkem
 
 
+    def is_free_day(self):
+        if self.date_to and self.date_from:
+            empl_id=self.employee_id.id
 
+            date_to=self.date_to.date()
+            date_from=self.date_from.date()
+            leave=self.env['account.analytic.line'].search([('employee_id', '=', empl_id), ('holiday_id', '!=', None), ('date', '<', date_to),('date', '>', date_from) ])
+
+            if int(len(leave))>0:
+                return True
+            else:
+                return False
+
+    @api.constrains('date_from', 'date_to')
+    def _validate_date(self):
+        for record in self:
+           if record.is_free_day()==True:
+                raise ValidationError(_("There are some leaves in selected date range. Please change date range."))
