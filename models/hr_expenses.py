@@ -199,3 +199,10 @@ class hr_expense(models.Model):
         for record in self:
            if record.is_free_day()==True:
                 raise ValidationError(_("There are some leaves in selected date range. Please change date range."))
+
+
+    @api.onchange('date_from')
+    def _onchange_check_product(self):
+        if self.date_from and self.product_id.id is False and self.env.user.company_id.exp_product_id.id:
+                self.product_id=self.env.user.company_id.exp_product_id.id
+

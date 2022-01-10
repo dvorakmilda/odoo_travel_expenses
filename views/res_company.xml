@@ -9,6 +9,7 @@
                 <field name="exp_min"/>
                 <field name="exp_mid"/>
                 <field name="exp_max"/>
+                <field name="exp_product_id"/>
             </xpath>
         </field>
     </record>

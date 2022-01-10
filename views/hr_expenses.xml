@@ -40,7 +40,6 @@
                             <field name="sheet_id" invisible="1"/>
                             <field name="currency_id" groups="base.group_multi_currency"/>
                             <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
-                            <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_tags"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group><group>
                             <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
