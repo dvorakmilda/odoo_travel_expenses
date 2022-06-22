@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 
 class hr_expense(models.Model):
     _inherit = 'hr.expense'
-#     _name = 'odoo_travel_epenses.odoo_travel_epenses'
+#     _name = ''
 
 
     is_travel = fields.Boolean()
@@ -206,3 +206,9 @@ class hr_expense(models.Model):
         if self.date_from and self.product_id.id is False and self.env.user.company_id.exp_product_id.id:
                 self.product_id=self.env.user.company_id.exp_product_id.id
 
+    @api.onchange('date_from','date_to')
+    def _onchange_set_istravel(self):
+        if self.date_from and self.date_to:
+                self.is_travel=True
+        else:
+            self.is_travel=False
