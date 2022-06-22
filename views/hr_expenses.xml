@@ -32,6 +32,7 @@
                         <label for="name"/>
                         <h1>
                             <field name="name" placeholder="e.g. Lunch with Customer"/>
+                            <field name="is_travel" invisible="1"/>
                         </h1>
                     </div>
 
@@ -44,22 +45,22 @@
                             <field name="unit_amount" required="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <label for="quantity"/>
                             <div>
-                                <field name="quantity" class="oe_inline"/>
-                                <field name="product_uom_id" widget="selection" class="oe_inline" groups="uom.group_uom"/>
+                                <field name="quantity" class="oe_inline" attrs="{'readonly': [('is_travel', '=', True)]}"/>
+                                <field name="product_uom_id" widget="selection" class="oe_inline" groups="uom.group_uom" attrs="{'readonly': [('is_travel', '=', True)]}"/>
                             </div>
-                            <field name="tax_ids" domain="[('type_tax_use', '=', 'purchase')]" widget="many2many_tags" groups="account.group_account_user"/>
+                            <field name="tax_ids" domain="[('type_tax_use', '=', 'purchase')]" widget="many2many_tags" groups="account.group_account_user" attrs="{'readonly': [('is_travel', '=', True)]}"/>
                         </group>
                         <group>
                             <field name="reference"/>
                             <field name="date"/>
-                            <field name="account_id" domain="[('internal_type', '=', 'other')]" groups="account.group_account_user"/>
+                            <field name="account_id" domain="[('internal_type', '=', 'other')]" groups="account.group_account_user" invisible="1"/>
                             <field name="employee_id" groups="hr_expense.group_hr_expense_user"/>
                             <field name="sheet_id" invisible="1"/>
-                            <field name="currency_id" groups="base.group_multi_currency"/>
-                            <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                            <field name="currency_id" groups="base.group_multi_currency" attrs="{'readonly': [('is_travel', '=', True)]}"/>
+                            <field name="analytic_account_id" string="Project" groups="analytic.group_analytic_accounting"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group><group>
-                            <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}" />
                             <label for="payment_mode"/>
                             <div>
                                 <field name="payment_mode" widget="radio"/>
