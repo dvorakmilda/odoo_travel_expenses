@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_odoo_timesheets_to_attendance,access_odoo_timesheets_to_attendance,model_odoo_timesheets_to_attendance,,1,1,1,1
+access_odoo_timesheets_to_attendance,hr.attendance.timesheets_to_attendance,model_hr_attendance,account.group_account_manager,1,1,1,1

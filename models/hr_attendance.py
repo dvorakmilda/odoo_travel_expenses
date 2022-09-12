@@ -17,8 +17,10 @@ class hr_attendance(models.Model):
     def create_lastmonth_attendance(self):
 
         now=datetime.today()
-        dictionary=dict();
-        dictionary['date_from'] = datetime(now.year, now.month, 1) + relativedelta(months=-1)
-        dictionary['date_to'] = datetime(now.year, now.month, 1) + relativedelta(minutes=-1)
-        return dictionary
+        date_from = datetime(now.year, now.month, 1) + relativedelta(months=-1)
+        date_to = datetime(now.year, now.month, 1) + relativedelta(minutes=-1)
+
+        ts=self.env["account.analytic.line"].search_read([('heo_id','>','0'),('odoo_sync_date','>=',date_from),"&",('odoo_sync_date','<=',date_to), ('work_type_id','in',(6,8))])
+
+        return ts
 
