@@ -1,21 +1,4 @@
 <odoo>
-
-    <record id="ts_view_attendance_tree" model="ir.ui.view">
-        <field name="name">hr.attendance.ts.attendance.tree</field>
-        <field name="model">hr.attendance</field>
-        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
-        <field name="arch" type="xml">
-         <xpath expr="//field[@name='employee_id']" position="before">
-                <button name="create_lastmonth_attendance"
-                    class="oe_stat_button"
-                    icon="fa-book"
-                    type="object"
-                    string="Attendance generator">
-                </button>
-            </xpath>
-        </field>
-    </record>
-
     <record model="ir.actions.server" id="action_create_lastmonth_attendance">
         <field name="name">Generate Attendances</field>
         <field name="model_id" ref="model_hr_attendance"/>
