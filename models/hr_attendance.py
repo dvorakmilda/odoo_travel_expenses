@@ -20,8 +20,10 @@ class hr_attendance(models.Model):
         now=datetime.today()
         date_from = datetime(now.year, now.month, 1) + relativedelta(months=-1)
         date_to = datetime(now.year, now.month, 1) + relativedelta(minutes=-1)
+        print (date_from)
+        print (date_to)
 
-        ts=self.env["account.analytic.line"].search_read([('heo_id','>','0'),('odoo_sync_date','>=',date_from),"&",('odoo_sync_date','<=',date_to), ('work_type_id','in',(6,8))])
+        ts=self.env["account.analytic.line"].search_read([('heo_id','>','0'),('date','>=',date_from),"&",('date','<=',date_to), ('work_type_id','in',(6,8))])
 
         ts.sort(key=operator.itemgetter('employee_id','date'))
 
@@ -33,7 +35,7 @@ class hr_attendance(models.Model):
 
         for rec in self.dictionary:
 
-            print('Zacatek smyčky',rec['employee_id'], rec['date'], rec['date'].strftime('%w'), rec['unit_amount'])
+            #print('Zacatek smyčky',rec['employee_id'], rec['date'], rec['date'].strftime('%w'), rec['unit_amount'])
             empl=self.env['hr.employee'].search_read([('id','=',rec['employee_id'][0])])
 
             calendar_id=empl[0].get('resource_calendar_id')[1]
@@ -57,7 +59,7 @@ class hr_attendance(models.Model):
                     tz_local=timezone('Europe/Prague')
                     self.check_in_date=tz_local.localize(utc_check_in_date)
                     self.check_out_date=tz_local.localize(utc_check_out_date)
-                    print('Zápis attendance', rec['date'],'total_time', total_time, h_in,h_out, self.check_in_date, self.check_out_date )
+             #       print('Zápis attendance', rec['date'],'total_time', total_time, h_in,h_out, self.check_in_date, self.check_out_date )
                     self._cr.execute('INSERT INTO hr_attendance (employee_id, check_in,check_out) VALUES (%s, %s, %s)', (rec['employee_id'][0],self.check_in_date,self.check_out_date))
 
 
@@ -73,7 +75,7 @@ class hr_attendance(models.Model):
             if total_time > 0:
                 new_check_out_date=self.check_out_date + relativedelta(hours=total_time)
                 self.check_in_date=self.check_out_date
-                print('Dodatečný zápis attendance', rec['date'],total_time, part['dayofweek'],h_in,h_out, self.check_in_date, new_check_out_date )
+              #  print('Dodatečný zápis attendance', rec['date'],total_time, part['dayofweek'],h_in,h_out, self.check_in_date, new_check_out_date )
                 self._cr.execute('INSERT INTO hr_attendance (employee_id, check_in,check_out) VALUES (%s, %s, %s)', (rec['employee_id'][0],self.check_in_date,new_check_out_date))
 
 #                attendance_id=self.env['hr.attendance'].create({
